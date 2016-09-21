@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Keeping it Classy, Part 1 of 2 - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Classes in JavaScriptJavaScript does not have classes in the classical-sense (pun intended), and there is a good amount of debate over whether JS classes should in fact be called classes. For the sak">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Keeping it Classy, Part 1 of 2">
+<meta property="og:url" content="http://iveytopaz.com/2016/09/21/keeping-it-classy/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="Classes in JavaScriptJavaScript does not have classes in the classical-sense (pun intended), and there is a good amount of debate over whether JS classes should in fact be called classes. For the sak">
+<meta property="og:image" content="http://iveytopaz.com/imgs/classes.png">
+<meta property="og:updated_time" content="2016-09-21T05:23:50.179Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Keeping it Classy, Part 1 of 2">
+<meta name="twitter:description" content="Classes in JavaScriptJavaScript does not have classes in the classical-sense (pun intended), and there is a good amount of debate over whether JS classes should in fact be called classes. For the sak">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/classes.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-keeping-it-classy" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Keeping it Classy, Part 1 of 2
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/09/21/keeping-it-classy/" class="article-date">
+  <time datetime="2016-09-21T05:23:50.235Z" itemprop="datePublished">09-21-2016</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/classes.png" alt="Getting classy, JavaScript style"></p>
+<h2 id="Classes-in-JavaScript"><a href="#Classes-in-JavaScript" class="headerlink" title="Classes in JavaScript"></a>Classes in JavaScript</h2><p>JavaScript does not have classes in the classical-sense (pun intended), and there is a good amount of debate over whether JS classes should in fact be called classes. For the sake of this blog post I will be putting that debate aside. When I talk about a class in JavaScript, I mean a constructor function that can produce objects (or instances) with the same properties and/or methods. The goal here is to take a look at how constructor functions (or class instatiators) in JavaScript work, and the different patterns of class instatiation. In this post, we will look at examine the functional class pattern, and take a brief glance at the prototypal pattern.</p>
+<a id="more"></a>
+<p><em>Spoiler Alert</em>: you should probably use the Pseudoclassical pattern (discussed in the next blog post) for class instatiation.</p>
+<h2 id="Class-Creation-Functionally-Speaking"><a href="#Class-Creation-Functionally-Speaking" class="headerlink" title="Class Creation, Functionally Speaking"></a>Class Creation, Functionally Speaking</h2><p>A class in JavaScript is created through a constructor function. Any function that creates objects can be considered a constructor function. A constructor function is like a mold, from which objects are forged. Imagine you own a well diversified car manufacturing plant. Your factory makes many different types of vehicles, but all of the vehicles have some things in common. Here is a simple example of what the Car class might look like.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Car = <span class="function"><span class="keyword">function</span>(<span class="params">color, doors, seats</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> car = &#123;&#125;;</div><div class="line"></div><div class="line">  car.color = color;</div><div class="line">  car.doors = doors;</div><div class="line">  car.seats = seats;</div><div class="line">  car.wheels = <span class="number">4</span>;</div><div class="line"></div><div class="line">  car.startEngine = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Vrooomm vrooomm'</span>);</div><div class="line">  &#125;;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> car;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>Now whenever you as a factory owner want to make a car, you can simply run the constructor function and specify what color car you want to make, and how many doors and seats it should have and -boom- you have a working car! This is the functional style of class instatiation. It is important to note here that you need to declare the object that you are creating in a variable at the start of the function, and then return that object after you have given it the desired properties and methods.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> littleRedCar = Car(<span class="string">'red'</span>, <span class="number">2</span>, <span class="number">4</span>);</div><div class="line">littleRedCar.startEngine() <span class="comment">//logs 'Vrooomm vrooomm' to the console</span></div></pre></td></tr></table></figure>
+<p>We have successfully created our first instance of the Car class and stored a reference to the newly created object in the littleRedCar variable. We can access all of the properties (color, doors, seats and wheels) and methods (startEngine) created by the constructor function on our instance of the Car class.</p>
+<h2 id="Building-on-the-Basics"><a href="#Building-on-the-Basics" class="headerlink" title="Building on the Basics"></a>Building on the Basics</h2><p>Being able to create a bunch of objects that have the same property names, setting values for those properties, and accessing the same methods on all instances of that class are nice features, but let’s say we want to create an object that is a car, but has other properties or functionality. A convertible, for example, shares the basic properties of a car, but can also lower its top. We could just create an instance of Car, and add the top-lowering method, like so:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> littleRedConvertible = Car(<span class="string">'red'</span>, <span class="number">2</span>, <span class="number">4</span>);</div><div class="line"></div><div class="line">littleRedConvertible.topUp = <span class="literal">true</span>;</div><div class="line"></div><div class="line">littleRedConvertible.lowerTop = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.topUp = <span class="literal">false</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This seems easy enough, but if we were going to make a lot of convertibles with different colors and numbers of doors and seats, we would have to add the extra functionality of lowering the top onto each convertible we make. An easier way to make all of our convertibles is to make a subclass of Car, which shares all the properties and methods from the Car class, but adds on the special characteristics of a convertible.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Convertible = <span class="function"><span class="keyword">function</span>(<span class="params">color, doors, seats</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> convertible = Car(color, doors, seats);</div><div class="line">  convertible.topUp = <span class="literal">true</span>;</div><div class="line"></div><div class="line">  convertible.lowerTop = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">this</span>.topUp = <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> convertible;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>This is the power of sublcassing. It allows you to take a class and expand on its already existing attributes and functionality.</p>
+<p>So far we have been creating our classes using the functional style. This style, as its name indicates, lists all properties and methods for a class inside the body of the constructor function. Being able to easily create a large number of objects with the same properties, and being able to build on a class using sublcasses is great, but we can add in memory optimizations by utilizing the prototypal style to write our classes.</p>
+<h2 id="Save-Memory"><a href="#Save-Memory" class="headerlink" title="Save Memory"></a>Save Memory</h2><p>Looking back on our car, and our convertible, each time we create an object using the functional pattern, we create a new instance of the functions referenced by each objects’ methods in memory.</p>
+<p>If that sentence doesn’t sink in for you at first, consider that JavaScript passes all non-primitves (aka. objects, arrays and functions, or if you want to get really technical, just objects) by reference, while it passes primitives (aka. strings, numbers, booleans etc.) by value. </p>
+<h3 id="Making-References"><a href="#Making-References" class="headerlink" title="Making References"></a>Making References</h3><p>When we say:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = <span class="number">2</span>;</div><div class="line"><span class="keyword">var</span> y = x; <span class="comment">//passes x as a copy of it's value --&gt; 2</span></div><div class="line">x = <span class="number">3</span>;</div><div class="line"><span class="built_in">console</span>.log(y); <span class="comment">//logs 2</span></div></pre></td></tr></table></figure>
+<p>the variable y is assigned the value contained in the variable x on line 2. A copy of that value (2) is made, and the y variable points to the copy in memory.</p>
+<p>Let’s contrast passing by value for primitives to passing by reference for non-primitives.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</div><div class="line"><span class="keyword">var</span> y = x;</div><div class="line">y[<span class="number">1</span>] = <span class="number">5</span>;</div><div class="line"><span class="built_in">console</span>.log(y); <span class="comment">//logs [1, 5, 3]</span></div></pre></td></tr></table></figure>
+<p>This surprising difference is a result of the fact that the variable x in the second example is passed to the variable y by reference. Variable y references the value stored in variable x. Rather than create a copy of the array assigned to variable x, javascript points the variable y to the actual place in memory where the original array exists. Now when we change the value at position 1 in the array in memory, variable y is pointing to the altered array. Thus, when we take a look at the value stored in y, we get the modified array.</p>
+<h3 id="Back-to-Classes"><a href="#Back-to-Classes" class="headerlink" title="Back to Classes"></a>Back to Classes</h3><p>This detour into passing by reference vs. passing by value is useful with respect to classes because we can utilize it to save memory. We can pass functions into methods by reference, and avoid creating a new function in memory every time we call a constructor to create an object. We do this by separating properties from methods in our classes. Consider the following:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> Car = <span class="function"><span class="keyword">function</span>(<span class="params">color, doors, seats</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> car = <span class="built_in">Object</span>.create(carMethods);</div><div class="line"></div><div class="line">  car.color = color;</div><div class="line">  car.doors = doors;</div><div class="line">  car.seats = seats;</div><div class="line">  car.wheels = <span class="number">4</span>;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> car</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> carMethods = &#123;&#125;;</div><div class="line"></div><div class="line">carMethods.startEngine = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Vrooomm vrooomm'</span>);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>You may be wondering at this point how Object.create works. I will cover that more in the next blog post, but for now, the takeaway is that we are giving every instance of the Car class a reference to the function stored in carMethods.startEngine. This is significant, because we do not create a copy in memory of the anonymous function which logs ‘Vrooomm vrooomm’ to the console. Rather, every instance of Car has a reference to that function, and can call it, but the function only exists once in memory. If we had a more complex function, more methods stored in carMethods, and were making 1000s of cars, we would save a lot of space in memory by separating the methods from the properties in the constructor function and passing functions from the constructor to the objects by reference.</p>
+<h2 id="But-wait-there’s-more"><a href="#But-wait-there’s-more" class="headerlink" title="But wait, there’s more!"></a>But wait, there’s more!</h2><p>We have covered how to create a class, and a subclass, as well as a technique for making object creation use less space in memory. Next up we will dive into how Object.create() works, and venture into the Pseudoclassical pattern. Stay tuned!</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/11/a-new-direction/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">A New Direction&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
