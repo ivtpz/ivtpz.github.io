@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>A Tale of Two Recursions - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Recursion is Scary Awesome.Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare yo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="A Tale of Two Recursions">
+<meta property="og:url" content="http://iveytopaz.com/2016/09/23/recursion/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="Recursion is Scary Awesome.Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare yo">
+<meta property="og:image" content="http://iveytopaz.com/imgs/recursionImage.jpeg">
+<meta property="og:image" content="http://iveytopaz.com/imgs/boards.png">
+<meta property="og:updated_time" content="2016-09-23T15:12:09.748Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="A Tale of Two Recursions">
+<meta name="twitter:description" content="Recursion is Scary Awesome.Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare yo">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/recursionImage.jpeg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-recursion" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      A Tale of Two Recursions
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/09/23/recursion/" class="article-date">
+  <time datetime="2016-09-23T15:12:09.860Z" itemprop="datePublished">09-23-2016</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/recursionImage.jpeg" alt="Oh No, an infinite loop!"></p>
+<h3 id="Recursion-is-Scary-Awesome"><a href="#Recursion-is-Scary-Awesome" class="headerlink" title="Recursion is Scary Awesome."></a>Recursion is <del>Scary</del> Awesome.</h3><p>Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare you back into the comforting braces of for loops. For those who are bold enough to stare down the abyss, however, recursion offers elegant solutions, especially for problems centering around traversing a decision tree, or iterating through permutations.</p>
+<a id="more"></a>
+<h3 id="Child’s-Play"><a href="#Child’s-Play" class="headerlink" title="Child’s Play"></a>Child’s Play</h3><p>To explore some strategies for implementing recursion in JavaScript, let’s consider the following problem:</p>
+<p>&nbsp;&nbsp;&nbsp; Given a number, n, count how many distinct ways there are to make a hopscotch board with n tiles.<br>&nbsp;&nbsp;&nbsp; HopScotch boards consist of lines of tiles, where each line contains either 1 or 2 tiles.</p>
+<p>I’ve created a JSFiddle to demonstrate a set of solutions for 5 tiles.</p>
+<iframe width="100%" height="300" src="//jsfiddle.net/ivtpz/xquuxc25/5/embedded/result,js/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+<h3 id="From-First-Principles"><a href="#From-First-Principles" class="headerlink" title="From First Principles"></a>From First Principles</h3><p>One approach to solving this problem is to start with scenarios where the solution is evident, and then build on those fundamental solutions. </p>
+<p>Building all the combinations when given 0 tiles has an obvious answer of 0 solutions. Likewise, the number of  solutions if we are given 1 tile is clearly one, and for 2 tiles it is two. These will be our base cases, and we will build all of our other solutions from these cases.</p>
+<p>Now we can build all of our other solutions. Let’s step forward a bit and consider being given 3 tiles. All the number of solutions for 3 tiles can be described as the number of solutions starting with 2 tiles at the top, plus the number of solutions starting with one tile at the top.</p>
+<p><img src="/imgs/boards.png" alt="Solution here is 1 + 2 = 3"></p>
+<p>We now have a basic roadmap for our problem and we can write some code. First we put in our base cases for n = 0, and n = 1. For any other n value, we need to know how many ways there are to arrange the hopscotch board starting with 2 tiles at the top, and how many ways we can do it starting with one tile at the top. The number of possible arrangements starting with one tile is simply the number of arrangements for n - 1 tiles. Similarly the number of arrangements starting with 2 tiles is equivalant to the number of solutions for n - 2 tiles.</p>
+<p>Enter recursion:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fromFirstPrinciples</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (n === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n === <span class="number">2</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">2</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> fromFirstPrinciples (n - <span class="number">2</span>) + fromFirstPrinciples (n<span class="number">-1</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>At this point you may be thinking ‘Wait! This is just another Fibonacci recursion demo.’ Very astute observation. In this case the number of solutions is given by the nth Fibonacci number for n greater than zero. Sometimes a problem can be modeled by a mathematical construct. Hmmmm, interesting…</p>
+<p>To make this problem a little more challenging, we could try to generate the solutions to the problem, instead of just counting them. For this iteration, I will use a technique that some find to be slightly more intuitive for recursion.</p>
+<h3 id="Leveraging-Closures"><a href="#Leveraging-Closures" class="headerlink" title="Leveraging Closures"></a>Leveraging Closures</h3><p>This time we will utilize two functions, and a storage array that will hold our solutions.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">outer</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> solutions = [];</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">recurse</span> (<span class="params">currentSolution, n</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (n === <span class="number">0</span>) &#123;</div><div class="line">      solutions.push(currentSolution);</div><div class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n === <span class="number">1</span>) &#123;</div><div class="line">      solutions.push(currentSolution.concat([<span class="number">1</span>]));</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      recurse(currentSolution.concat([<span class="number">2</span>]), n - <span class="number">2</span>);</div><div class="line">      recurse(currentSolution.concat([<span class="number">1</span>]), n - <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  recurse([], n);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> solutions;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>To see what this version of recursion looks like, in comparison to the pure functional recursion we were doing before, check out the JavaScript tab on the Fiddle above. It uses head-tail recursion to solve this same problem. Many people will argue that the pure functional version is more elegant version. This may be true, but for creating an array of solutions it can be difficult to visualize what should be returned in the recursive call. Having the storage array, and currentSolution as a parameter in the recursive funciton can make visualizing what is happening in the recursion easier.</p>
+<p>We still have similar base cases, and we are still splitting our problem into the solutions with 2 tiles at the top, combined with the solutions with 1 tile at the top. The basic structure remains, but this style can be more readable, and useful to you depending on the type of output you want to generate. I generally try to employ the functional style, but when I am having trouble visualizing the problem I will use an external variable. I also like the external variable for tree traversal that is doing more than just counting leaves.</p>
+<h3 id="Stack-Overflow"><a href="#Stack-Overflow" class="headerlink" title="Stack Overflow"></a>Stack Overflow</h3><p>One issue in JS with recursion is it can overflow the call stack. All of the calls to the recursive function that have not finished executing pile up, and for large n’s, the call stack fills up. In those cases iteration is generally a better way to go, or look into ES6’s <a href="http://benignbemine.github.io/2015/07/19/es6-tail-calls/" target="_blank" rel="external">tail call optimization</a>. </p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/21/keeping-it-classy/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Keeping it Classy, Part 1 of 2&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
