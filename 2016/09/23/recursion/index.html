@@ -13,7 +13,7 @@
 <meta property="og:description" content="Recursion is Scary Awesome.Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare yo">
 <meta property="og:image" content="http://iveytopaz.com/imgs/recursionImage.jpeg">
 <meta property="og:image" content="http://iveytopaz.com/imgs/boards.png">
-<meta property="og:updated_time" content="2016-09-23T15:53:55.894Z">
+<meta property="og:updated_time" content="2016-09-23T15:56:30.136Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Tale of Two Recursions">
 <meta name="twitter:description" content="Recursion is Scary Awesome.Let’s be honest, recursion can be intimidating. Crashing your browser by poorly defining your base case and sending your program spiraling into infinity can easily scare yo">
@@ -69,7 +69,7 @@
     
     <div class="article-meta">
       <a href="/2016/09/23/recursion/" class="article-date">
-  <time datetime="2016-09-23T15:53:55.962Z" itemprop="datePublished">09-23-2016</time>
+  <time datetime="2016-09-23T15:56:30.176Z" itemprop="datePublished">09-23-2016</time>
 </a>
       
       
@@ -85,7 +85,7 @@
 <iframe width="100%" height="300" src="//jsfiddle.net/ivtpz/xquuxc25/5/embedded/result,js/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
 
 <h3 id="From-First-Principles"><a href="#From-First-Principles" class="headerlink" title="From First Principles"></a>From First Principles</h3><p>One approach to solving this problem is to start with scenarios where the solution is evident, and then build on those fundamental solutions. </p>
-<p>Building all the combinations when given 0 tiles has an obvious answer of 1 solution. Ok, maybe that doesn’t seem obvious to you if you’re not a mathematician, but the empty board is a solution, so for no tiles, there is one solution. The number of  solutions if we are given 1 tile is clearly one. we will build all of our other solutions from these cases.</p>
+<p>Building all the combinations when given 0 tiles has an obvious answer of 1 solution. Ok, maybe that doesn’t seem obvious to you if you’re not a mathematician, but the empty board is a solution, so for no tiles, there is one solution. The number of solutions if we are given 1 tile is clearly one - this one is definitely obvious. We will build all of our other solutions from these cases.</p>
 <p>Now we can build all of our other solutions. Let’s step forward a bit and consider being given 3 tiles. All the number of solutions for 3 tiles can be described as the number of solutions starting with 2 tiles at the top, plus the number of solutions starting with one tile at the top.</p>
 <p><img src="/imgs/boards.png" alt="Solution here is 1 + 2 = 3"></p>
 <p>We now have a basic roadmap for our problem and we can write some code. First we put in our base cases for n = 0, and n = 1. For any other n value, we need to know how many ways there are to arrange the hopscotch board starting with 2 tiles at the top, and how many ways we can do it starting with one tile at the top. The number of possible arrangements starting with one tile is simply the number of arrangements for n - 1 tiles. Similarly the number of arrangements starting with 2 tiles is equivalant to the number of solutions for n - 2 tiles.</p>
