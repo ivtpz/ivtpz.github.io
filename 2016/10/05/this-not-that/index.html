@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>This, not That - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Deciphering how the this keyword gets bound in Javascript functions can seem a little confusing at first. I’ll run through a quick explanation of how this bindings are set, and then move on to someth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="This, not That">
+<meta property="og:url" content="http://iveytopaz.com/2016/10/05/this-not-that/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="Deciphering how the this keyword gets bound in Javascript functions can seem a little confusing at first. I’ll run through a quick explanation of how this bindings are set, and then move on to someth">
+<meta property="og:image" content="http://iveytopaz.com/imgs/this.jpg">
+<meta property="og:updated_time" content="2016-10-05T07:03:44.946Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="This, not That">
+<meta name="twitter:description" content="Deciphering how the this keyword gets bound in Javascript functions can seem a little confusing at first. I’ll run through a quick explanation of how this bindings are set, and then move on to someth">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/this.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-this-not-that" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      This, not That
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/05/this-not-that/" class="article-date">
+  <time datetime="2016-10-05T07:03:44.946Z" itemprop="datePublished">10-05-2016</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/this.jpg" alt="Diagramming this bindings"></p>
+<p>Deciphering how the <code>this</code> keyword gets bound in Javascript functions can seem a little confusing at first. I’ll run through a quick explanation of how this bindings are set, and then move on to something more interesting: ES6 and <code>this</code>.</p>
+<a id="more"></a>
+<h3 id="Keeping-it-Simple"><a href="#Keeping-it-Simple" class="headerlink" title="Keeping it Simple"></a>Keeping it Simple</h3><p>The key to understanding what <code>this</code> refers to is starting with the call time for a function. Consider the following code:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.prototype.showThis = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="keyword">this</span>);</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="keyword">var</span> Tim = &#123;</div><div class="line">  name: <span class="string">'Tim'</span>,</div><div class="line">  speak: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">"Hi, I'm "</span> + <span class="keyword">this</span>.name)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> Tina = &#123;</div><div class="line">  name: <span class="string">'Tina'</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">Tim.showThis() <span class="comment">//logs Tim object</span></div><div class="line">Tina.showThis() <span class="comment">//logs Tina object</span></div><div class="line">Tim.speak() <span class="comment">//"Hi, I'm Tim"</span></div><div class="line">Tim.speak.call(Tina) <span class="comment">//"Hi, I'm Tina"</span></div><div class="line">setTimeout(Tim.speak, <span class="number">1000</span>) <span class="comment">//logs "Hi, I'm undefined" after 1 sec</span></div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(<span class="keyword">this</span>) <span class="comment">//logs Window object</span></div></pre></td></tr></table></figure>
+<p>If you understand the <code>this</code> bindings in the examples above, you are at least 90% of the way towards achieving <code>this</code> Nirvana. Usually, <code>this</code> gets bound by whatever is to the left of the dot at the call time of the function, as in the first three examples above.</p>
+<p>Three methods can bind <code>this</code> to a context other than what is to the left of the dot at function call time: <code>call</code>, <code>apply</code>, and <code>bind</code>. These three override the left of the dot rule, and will run their target functions with <code>this</code> set to be the context passed in as the first argument. When Tina is passed as the first argument to <code>Tim.speak.call</code>, the Tina object is set as <code>this</code>, so <code>this.name</code> inside of speak refers to ‘Tina’.</p>
+<p>A slightly more confusing example is using <code>setTimeout</code>. When a funciton is called inside of <code>setTimeout</code>, it loses it’s <code>this</code> binding because it is called from within the pre-defined body of <code>setTimeout</code>. So, at call time, <code>this</code> has no binding.</p>
+<p>When no binding has been set for <code>this</code>, it will refer to the global, or Window object. In these cases, <code>this</code> is of no value, and there is likely an error in the code - as shown by the <code>setTimeout</code> example.</p>
+<h3 id="Arrow-Functions-and-this"><a href="#Arrow-Functions-and-this" class="headerlink" title="Arrow Functions and this"></a>Arrow Functions and <code>this</code></h3><p>ES6 has introduced a number of keystroke saving inovations, my favorite being the <code>(arrow) =&gt; {function}</code>. Hooray, no more typing out the word ‘function’ for me! Or so I thought…</p>
+<p>An interesting, and initially perplexing, feature of arrow functions is that they bind <code>this</code> to the lexical scope in which the function is written.</p>
+<p>If I lost you somewhere between the words lexical and scope in the last sentence, fear not. All will become clear very soon.</p>
+<p>Let’s get some concrete examples:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">window</span>.name = <span class="string">"Gotchya!"</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> Tim = &#123;</div><div class="line">  name: <span class="string">'Tim'</span>,</div><div class="line">  speak: () =&gt; <span class="built_in">console</span>.log(<span class="string">"Hi, I'm "</span> + <span class="keyword">this</span>.name)</div><div class="line">&#125;</div><div class="line"></div><div class="line">Tim.speak() <span class="comment">//"Hi, I'm Gotchya" (when run in a browser)</span></div></pre></td></tr></table></figure></p>
+<p>Uh oh, we got got!</p>
+<p>An arrow function is not the best choice in this case. When the <code>speak</code> method is defined on the <code>Tim</code> object, it’s <code>this</code> binding is set to be the <em>lexical scope</em>. This means the scope of the actual code in which the arrow function is used. Whereas before we were looking at the <em>call time</em> of functions to determine their <code>this</code> bindings, now we need to look at the code surrounding the arrow function instance.</p>
+<p>When <code>Tim.speak</code> is defined, the scope of Tim is the global scope. Thus, when we run <code>Tim.speak()</code> we see that (assuming we are in a browser where the window object exists) <code>this</code> references window (or the global object).</p>
+<p>Here’s another angle on the <code>this</code> problem:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">DadOfTim</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = <span class="string">'Pops'</span>,</div><div class="line">  <span class="keyword">this</span>.son = &#123;</div><div class="line">    name: <span class="string">'Tim'</span>,</div><div class="line">    speak: () =&gt; <span class="built_in">console</span>.log(<span class="keyword">this</span>.name)</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">DadOfTim.prototype.speak = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.son.speak()</div><div class="line">&#125;</div><div class="line"></div><div class="line">dadOfTim = <span class="keyword">new</span> DadOfTim()</div><div class="line">dadOfTim.speak() <span class="comment">//take a guess what gets logged</span></div><div class="line"><span class="keyword">var</span> timForSure = dadOfTim.son.speak.bind(dadOfTim.son);</div><div class="line">timForSure() <span class="comment">//and guess again</span></div></pre></td></tr></table></figure></p>
+<p>If you guessed ‘Pops’ for both, you win +3<sup>2</sup> brownie points. I hope you didn’t get got again, but if you did, keep reading. We will un-suckerify you yet!</p>
+<p>If you look at the call time for the <code>dadOfTim.speak()</code> function, the call happens on line 10, with <code>this.son.speak()</code>. Based on our old left of the dot rule, line 14 should log <code>this.son.name</code>, which is ‘Tim’. However, since we defined <code>this.son.speak</code> using an arrow function, it’s <code>this</code> value is bound lexically. <code>This</code> inside of the <code>speak</code> definition on line 5 gets bound to any instance of <code>DadOfTim</code>, and ‘Pops’ overrides ‘Tim’. Sorry Tim, dad wins.</p>
+<p>Even when you try to bind the initial speak function to Tim, like on line 15, ES6 won’t have it. Arrow functions just can’t be tied down like that.</p>
+<h2 id="var-Bug-new-Feature"><a href="#var-Bug-new-Feature" class="headerlink" title="var Bug = new Feature()"></a>var Bug = new Feature()</h2><p>Dealing with arrow function <code>this</code> bindings can feel like a bug in ES6 at first. Once you understand how <code>this</code> is set, however, you start to see the light. There are times when lexical <code>this</code> binding can be very useful.</p>
+<p>When to AVOID arrow functions:</p>
+<ul>
+<li>Method definitions</li>
+<li>Object constructors using ‘new’</li>
+</ul>
+<p>When arrow functions are totally AWESOME:</p>
+<ul>
+<li>Inside of setTimeouts / setIntervals</li>
+<li>In underscore functions</li>
+</ul>
+<p>You’ve already seen the pitfalls of lexical <code>this</code> bindings, so let’s briefly see some of the benefits.</p>
+<p>Here is a setTimeout example using our correctly defined DadOfTim class:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">DadOfTim</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.name = <span class="string">'Pops'</span>,</div><div class="line">  <span class="keyword">this</span>.son = &#123;</div><div class="line">    name: <span class="string">'Tim'</span>,</div><div class="line">    speak: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123; <span class="built_in">console</span>.log(<span class="keyword">this</span>.name) &#125;</div><div class="line">  &#125;</div><div class="line"><span class="comment">//Before...</span></div><div class="line">  setTimeout( <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123; <span class="keyword">this</span>.speak() &#125;.bind(<span class="keyword">this</span>), <span class="number">1000</span>)</div><div class="line"><span class="comment">//with ES6</span></div><div class="line">  setTimeout(() =&gt; <span class="keyword">this</span>.speak(), <span class="number">2000</span>)</div><div class="line">&#125;</div><div class="line"></div><div class="line">DadOfTim.prototype.speak = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>.son.speak()</div><div class="line">&#125;</div><div class="line">dadOfTim = <span class="keyword">new</span> DadOfTim()</div><div class="line"></div><div class="line"><span class="comment">//logs Tim after 1 second</span></div><div class="line"><span class="comment">//logs Tim after 2 seconds</span></div></pre></td></tr></table></figure></p>
+<p>You will find much more predictable behavior, and need less work-arounds in <code>setTimeout</code> and <code>setInterval</code> functions when using arrow functions.</p>
+<p>With underscore functions ES6 code is much more readable.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> dads = [<span class="keyword">new</span> DadOfTim(), <span class="keyword">new</span> DadOfTim()];</div><div class="line"></div><div class="line"><span class="comment">//before...</span></div><div class="line">dads.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">dad</span>) </span>&#123; dad.speak() &#125;);</div><div class="line"></div><div class="line"><span class="comment">//with ES6</span></div><div class="line">dads.forEach(dad =&gt; dad.speak());</div></pre></td></tr></table></figure>
+<h3 id="Go-Forth-and-Streamline"><a href="#Go-Forth-and-Streamline" class="headerlink" title="Go Forth and Streamline"></a>Go Forth and Streamline</h3><p>You should use arrow functions whenver possible. They make for clean, readable, concise code. Just beware of the changes in <code>this</code> bindings. As TLC once said, don’t go chasing shorter code, please stick to the methods and pseudoclassical instatiatons you’re use to. Or something like that…</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/09/28/classes-part-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Keeping it Classy, Part 2 of 2&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
