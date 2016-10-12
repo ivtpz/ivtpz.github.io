@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>You Got Served - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="After spending several months learning the fundamentals of JavaScript and Computer Science, the past week for me has been all about servers. Going from a world of well defined rules and guidelines, t">
+<meta property="og:type" content="article">
+<meta property="og:title" content="You Got Served">
+<meta property="og:url" content="http://iveytopaz.com/2016/10/12/You-got-served/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="After spending several months learning the fundamentals of JavaScript and Computer Science, the past week for me has been all about servers. Going from a world of well defined rules and guidelines, t">
+<meta property="og:image" content="http://iveytopaz.com/imgs/server.jpg">
+<meta property="og:updated_time" content="2016-10-12T04:23:30.924Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="You Got Served">
+<meta name="twitter:description" content="After spending several months learning the fundamentals of JavaScript and Computer Science, the past week for me has been all about servers. Going from a world of well defined rules and guidelines, t">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/server.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-You-got-served" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      You Got Served
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/12/You-got-served/" class="article-date">
+  <time datetime="2016-10-12T04:23:30.964Z" itemprop="datePublished">10-12-2016</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/server.jpg" alt="Servers don&#39;t have to be mystifying"></p>
+<p>After spending several months learning the fundamentals of JavaScript and Computer Science, the past week for me has been all about servers. Going from a world of well defined rules and guidelines, to the Wild West of communication over the internet has been challenging. </p>
+<a id="more"></a>
+<h2 id="Service-is-Key"><a href="#Service-is-Key" class="headerlink" title="Service is Key"></a>Service is Key</h2><p>I will do a few blog posts covering server techniques, CORS requests, headers, authentication and more, but I want to start off with something simple: how to build your first server in Node.js. </p>
+<p>In it’s most basic form, a server controls access to some data, resource or service. If you are building your first server, chances are it is to serve up some local resources for testing. So let’s take the first step together - here is how to go from data on your computer to representation on a browser.</p>
+<p>Node runs on JavaScript, so this post presupposes basic knowledge of JavaScript, and you will need to have installed node.</p>
+<h2 id="Start-Small"><a href="#Start-Small" class="headerlink" title="Start Small"></a>Start Small</h2><p>As you begin building servers to run web apps you will quickly realize that dependencies/modules are like rabbits - they seem to multiply all on their own. You want to run an authentication module, but find you need 3 other modules just to make the first one work. </p>
+<p>Before you fall down that rabbit hole, it is important to understand the fundamentals of building a server. So without furter ado, here is a Node.js server in 10 lines: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//server.js</span></div><div class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</div><div class="line"><span class="keyword">const</span> port = process.env.PORT || <span class="number">3000</span>;</div><div class="line"><span class="keyword">const</span> ip = process.env.IP || <span class="string">'127.0.0.1'</span>;</div><div class="line"><span class="keyword">const</span> server = http.createServer(<span class="function"><span class="keyword">function</span>(<span class="params">request, response</span>) </span>&#123;</div><div class="line">  response.end(<span class="string">'Oh, hi there!'</span>)</div><div class="line">&#125;);</div><div class="line">server.listen(port, ip, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'The magic is on '</span> + ip + <span class="string">':'</span> + port);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>Http is a built in module included with node. In order to get started with serving data, simply save this code in a file, run <code>node &lt;path-to-filename&gt;</code> in your terminal, go to localhost:3000, or 127.0.0.1:3000 in your browser, and there you have it. You’ve made your first server.</p>
+<p>The one piece that may be confusing here is the reference to <code>process.env</code>. This is similar to the global object in vanilla JavaScript, and gives you access to information about the environment of the user currently accessing the server. More on that later, but here it is used as a way to access the server, and when no information is provided, <code>port</code> and <code>IP</code> fall back to defaults of <code>3000</code> and <code>127.0.0.1</code> aka. localhost, which are provided. You can choose any number beteween <code>1024</code> and <code>49151</code> for your port.</p>
+<p>We will dive deeper into how to use a server to serve more interesting things than a text string next, but for now, bask in the glory of having communicated information through a server. Welcome to the Information Age!</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/10/05/this-not-that/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">This, not That&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
