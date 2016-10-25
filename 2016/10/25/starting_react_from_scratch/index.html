@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>React From Scratch - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="I recently tried out FaceBook’s new react-create-app starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my seco">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React From Scratch">
+<meta property="og:url" content="http://iveytopaz.com/2016/10/25/starting_react_from_scratch/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="I recently tried out FaceBook’s new react-create-app starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my seco">
+<meta property="og:image" content="http://iveytopaz.com/imgs/react.png">
+<meta property="og:updated_time" content="2016-10-25T05:35:05.029Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React From Scratch">
+<meta name="twitter:description" content="I recently tried out FaceBook’s new react-create-app starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my seco">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/react.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-starting_react_from_scratch" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      React From Scratch
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2016/10/25/starting_react_from_scratch/" class="article-date">
+  <time datetime="2016-10-25T05:35:05.029Z" itemprop="datePublished">10-25-2016</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/react.png" alt="React is fantastic. Once you get it started..."></p>
+<p>I recently tried out FaceBook’s new <code>react-create-app</code> starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my second go with React, I decided, perhaps unwisely, to build it from the ground up. After some missteps and a lot of time spent researching, here is the build I came up with.</p>
+<a id="more"></a>
+<h2 id="Why-DIY"><a href="#Why-DIY" class="headerlink" title="Why DIY?"></a>Why DIY?</h2><p>There are plenty of good reasons to use a starter kit and skip the environment set up for React. However, if you want flexibility, control, and that satisfying feeling that only comes with doing things yourself, you’re going to have to roll up your sleeves and get to ready to <code>npm install</code>. I don’t claim that this build is perfect, but it works, and it’s absolutely minimal. So without further ado, here is React from Scratch:</p>
+<h2 id="Pre-Reqs"><a href="#Pre-Reqs" class="headerlink" title="Pre-Reqs"></a>Pre-Reqs</h2><p>You will need <code>node</code> and <code>npm</code> installed globally to start this process, as well as <code>grunt-cli</code> to run the build. You will also need a basic server to serve up your static files. If you just want to test out React on your local machine, you can use the <code>live-server</code> package from npm, but for deployment, you will need your own server. I’ll start with setting up your project and building a simple server.</p>
+<h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>Create your project directory, and <code>npm init</code> from inside the directory - you can speed through the setup process by just hitting enter for each option, or fill it out know if you know you will be deploying the project. Then <code>git init</code> and set up your <code>git remote</code>(this step is optional).</p>
+<p>Start off with <code>npm install express --save</code> and then <code>touch server.js</code> from inside your project directory. We will make a minimal server for now, which you can add to later as you build out your app:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//server.js</span></div><div class="line"><span class="meta">'use strict'</span>;</div><div class="line"></div><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"><span class="keyword">var</span> app = express();</div><div class="line"></div><div class="line"><span class="comment">// setting port</span></div><div class="line"><span class="keyword">var</span> port = process.env.PORT || <span class="number">8080</span>;</div><div class="line"></div><div class="line"><span class="comment">// serving static files</span></div><div class="line">app.use(express.static(path.join(__dirname, <span class="string">'public'</span>)));</div><div class="line"></div><div class="line">app.listen(port, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">'Go witness the magic at http://localhost:'</span> + port);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="HTML-page"><a href="#HTML-page" class="headerlink" title="HTML page"></a>HTML page</h2><p>Next up, let’s set up our <code>index.html</code> page. First, <code>mkdir public &amp;&amp; cd $_</code>,<br>then <code>touch index.html</code>. Start out with a basic HTML layout, just be sure to include a <code>&lt;div id=&quot;app&quot;&gt;&lt;/div&gt;</code>. This is where React will render its components:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>My React App From Scratch<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>More on the <code>bundle.js</code> file in a bit.</p>
+<h2 id="Get-React"><a href="#Get-React" class="headerlink" title="Get React"></a>Get React</h2><p>Our page is being served, let’s render something to it! Start out with <code>npm install --save</code> for the following packages: <code>react</code>, <code>react-dom</code>. Now from your project’s root directory <code>mkdir src &amp;&amp; cd $_</code>, then <code>touch app.jsx</code>. For now we are only making one file in the src directory, but once we have our <code>grunt</code> tasks up and running, any .js or .jsx files you add in src, or a child directory of src will compile into a single file to run in the browser.</p>
+<h2 id="Grunt-Good"><a href="#Grunt-Good" class="headerlink" title="Grunt Good."></a>Grunt Good.</h2><p>Speaking of <code>Grunt</code>, let’s get that started. This is where things get a bit difficult. I am going to give you some minimal Grunt tasks that will <code>browserify</code> your React JavaScript files, and use <code>Babel</code>, so the <code>.jsx</code> files will run, and you can write some terse, beautiful es6 code. Go ahead and <code>npm install --save-dev grunt grunt-browserify grunt-concurrent grunt-contrib-watch grunt-nodemon babel-cli babel-preset-es2015 babel-preset-react babelify open</code>. Pshew, that was a mouth full. Luckily for you, I put the command in one line, so you can just copy-paste it into your terminal and run it from your project root directory.</p>
+<p>OK the pieces are in place, let’s make the Grunt file. From the project directory, <code>touch Gruntfile.js</code>, and open it up. You’ll need the following to run the build:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//Gruntfile.js</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">grunt</span>) </span>&#123;</div><div class="line"></div><div class="line">  grunt.initConfig(&#123;</div><div class="line">    pkg: grunt.file.readJSON(<span class="string">'package.json'</span>),</div><div class="line"></div><div class="line">    concurrent: &#123;</div><div class="line">      target: &#123;</div><div class="line">        tasks: [<span class="string">'nodemon'</span>, <span class="string">'watch'</span>],</div><div class="line">        options: &#123;</div><div class="line">            logConcurrentOutput: <span class="literal">true</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    watch: &#123;</div><div class="line">      browserify: &#123;</div><div class="line">        files: [<span class="string">'src/**/*.jsx'</span>],</div><div class="line">        tasks: [<span class="string">'browserify'</span>]</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    browserify: &#123;</div><div class="line">      dist: &#123;</div><div class="line">        options: &#123;</div><div class="line">          transform: [</div><div class="line">            [<span class="string">'babelify'</span>, &#123;</div><div class="line">              presets: [<span class="string">'es2015'</span>, <span class="string">'react'</span>]</div><div class="line">            &#125;]</div><div class="line">          ],</div><div class="line">          watch: <span class="literal">true</span>,</div><div class="line">          browserifyOptions: &#123;</div><div class="line">            debug: <span class="literal">true</span>,</div><div class="line">            insertGlobals: <span class="literal">true</span></div><div class="line">          &#125;</div><div class="line">        &#125;,</div><div class="line">        src: [<span class="string">'src/**/*.jsx'</span>],</div><div class="line">        dest: <span class="string">'public/bundle.js'</span></div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    nodemon: &#123;</div><div class="line">      dev: &#123;</div><div class="line">        script: <span class="string">'server.js'</span>,</div><div class="line">        options: &#123;</div><div class="line">          ignore: [<span class="string">'node_modules/**'</span>],</div><div class="line">          callback: <span class="function"><span class="keyword">function</span> (<span class="params">nodemon</span>) </span>&#123;</div><div class="line">            nodemon.on(<span class="string">'log'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">event</span>) </span>&#123;</div><div class="line">              <span class="built_in">console</span>.log(event.colour);</div><div class="line">            &#125;);</div><div class="line"></div><div class="line">            nodemon.on(<span class="string">'config:update'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">            setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">              <span class="built_in">require</span>(<span class="string">'open'</span>)(<span class="string">'http://localhost:8080'</span>);</div><div class="line">            &#125;, <span class="number">1000</span>);</div><div class="line">            &#125;);</div><div class="line">          &#125;</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  grunt.loadNpmTasks(<span class="string">'grunt-contrib-watch'</span>);</div><div class="line">  grunt.loadNpmTasks(<span class="string">'grunt-browserify'</span>);</div><div class="line">  grunt.loadNpmTasks(<span class="string">'grunt-nodemon'</span>);</div><div class="line">  grunt.loadNpmTasks(<span class="string">'grunt-concurrent'</span>);</div><div class="line"></div><div class="line">  grunt.registerTask(<span class="string">'default'</span>, [<span class="string">'build'</span>, <span class="string">'concurrent:target'</span>]);</div><div class="line">  grunt.registerTask(<span class="string">'build'</span>, [<span class="string">'browserify'</span>]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Some key things in here: the <code>watch: true</code> on <code>browserify</code> will make it so only changes update in the build, meaning it will be much faster. Also the <code>debug: true</code> will map the errors in your <code>bundle.js</code> file back to the source file, making error tracking much easier. You can now run <code>grunt build</code> from your terminal to create the <code>bundle.js</code> file, or just run <code>grunt</code>, which will build your project, set up a node server with nodemon and a browserify watch looking for changes, and open a browser window with your project.</p>
+<h2 id="The-world-is-your-oyster"><a href="#The-world-is-your-oyster" class="headerlink" title="The world is your oyster"></a>The world is your oyster</h2><p>This is where the fun really begins. You have a working React environment. Try out the following code in your <code>app.jsx</code> file:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">"use strict"</span>;</div><div class="line"><span class="keyword">import</span> React <span class="keyword">from</span> <span class="string">'react'</span></div><div class="line"><span class="keyword">import</span> ReactDOM <span class="keyword">from</span> <span class="string">'react-dom'</span></div><div class="line"></div><div class="line">ReactDOM.render(</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>You Really Did It!!<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span>,</div><div class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'app'</span>)</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>Run <code>grunt</code> in your terminal, and witness the fruits of your labor.</p>
+<p>You can put any file structure you want for your React files inside the src directory. As long as you use <code>import</code> (es6 syntax) or <code>require</code> to include code needed from other files in your current file, <code>browserify</code> will take care of the rest.</p>
+<h2 id="Options-for-Improvement"><a href="#Options-for-Improvement" class="headerlink" title="Options for Improvement"></a>Options for Improvement</h2><p>The main problems I’ve found with this build set up are:</p>
+<ol>
+<li>I haven’t found a way to successfully integrate browserSync or liveReloads.</li>
+<li><code>grunt-browserify</code> does not have an <code>.on(&#39;error&#39;, ...)</code> option, so if browserify errors out, you have to run <code>killall node</code> to avoid nodemon complaining that the port is already in use next time you use it.</li>
+</ol>
+<p>If you are wizard-ly enough to solve either of those problems, reach out and let me know how!</p>
+<h2 id="Boom-You’re-Reacting"><a href="#Boom-You’re-Reacting" class="headerlink" title="Boom, You’re Reacting"></a>Boom, You’re Reacting</h2><p>There’s plenty you could add onto this build, but that’s the beauty of it - it’s completely customizable. Now it’s time to get busy making a fast, responsive app. Have fun!</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/10/12/You-got-served/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">You Got Served&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+  </div>
+</body>
+</html>
