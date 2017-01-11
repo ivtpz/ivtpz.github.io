@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Time Complexity in Recursive Functions - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Analyzing and evaluating recursive functions is a mathematically daunting dask. However, there are a few guidelines that can help you break recursive functions into categories, and lead you to determ">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Time Complexity in Recursive Functions">
+<meta property="og:url" content="http://iveytopaz.com/2017/01/11/recursion-time-complexity/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="Analyzing and evaluating recursive functions is a mathematically daunting dask. However, there are a few guidelines that can help you break recursive functions into categories, and lead you to determ">
+<meta property="og:image" content="http://iveytopaz.com/imgs/recursiveTime.jpg">
+<meta property="og:image" content="http://iveytopaz.com/imgs/mergeTree.png">
+<meta property="og:image" content="http://iveytopaz.com/imgs/fibTree.png">
+<meta property="og:updated_time" content="2017-01-11T10:47:10.041Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Time Complexity in Recursive Functions">
+<meta name="twitter:description" content="Analyzing and evaluating recursive functions is a mathematically daunting dask. However, there are a few guidelines that can help you break recursive functions into categories, and lead you to determ">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/recursiveTime.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-86356826-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-recursion-time-complexity" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Time Complexity in Recursive Functions
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/01/11/recursion-time-complexity/" class="article-date">
+  <time datetime="2017-01-11T05:00:00.000Z" itemprop="datePublished">01-11-2017</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/recursiveTime.jpg" alt="Recursive Time Complexity, oh my..."></p>
+<p>Analyzing and evaluating recursive functions is a mathematically daunting dask. However, there are a few guidelines that can help you break recursive functions into categories, and lead you to determining their Big-O Time Complexity.</p>
+<a id="more"></a>
+<h2 id="Basics-of-Time-Complexity"><a href="#Basics-of-Time-Complexity" class="headerlink" title="Basics of Time Complexity"></a>Basics of Time Complexity</h2><p>I’ll be discussing Big-O time complexity in this post. There are lots of great resources out there for understanding Big-O, like <a href="https://rob-bell.net/2009/06/a-beginners-guide-to-big-o-notation/" target="_blank" rel="external">Rob Bell’s blog post</a>,  <a href="https://justin.abrah.ms/computer-science/big-o-notation-explained.html" target="_blank" rel="external">Justin Abrah’s post</a> and, of course, the <a href="http://bigocheatsheet.com/" target="_blank" rel="external">Big-O Cheat Sheet</a>. I’m going to assume you already have working knowledge of Big-O, and its notation, so that we can focus on strategies for calculating Big-O in recursive functions. The important thing to keep in mind is that Big-O is looking at the relationship between the size of your input to a function and the number of operations that function performs. When we say that something has linear time complexity, we are saying that the number of operations will be equal to some constant times the number of inputs, or $operations = C*n$.</p>
+<h2 id="Recursive-Functions-with-One-Recursive-Call"><a href="#Recursive-Functions-with-One-Recursive-Call" class="headerlink" title="Recursive Functions with One Recursive Call"></a>Recursive Functions with One Recursive Call</h2><h3 id="Linear-Big-O"><a href="#Linear-Big-O" class="headerlink" title="Linear Big-O"></a>Linear Big-O</h3><p>The following is a function that will sum the numbers from 1 to n.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sum</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span>(n &lt;== <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span> + sum(n - <span class="number">1</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Here each call to sum generates one recursive call to sum, and that chain continues n times, until we reach the base case of <code>n === 0</code>. For an input of size n, we make n calls to our recursive function. Each call is simply doing a constant time operation, or generating another recursive call. This gives us a time complexity of n * some constant, or $O(n)$.</p>
+<p>Even if we were decrementing n by some arbitrary number in each recursive call, say 3, and summing every third number between 1 and n, this would still be $O(n)$. In that case the number of operations would be $\frac{1}{3}*n$, which is just a constant times n, or in other words linear time complexity.</p>
+<p>In general, recursive functions that mimic simple iteration, perform a constant time operation, and generate a single recursive call are $O(n)$.</p>
+<h3 id="Logarithmic-Big-O"><a href="#Logarithmic-Big-O" class="headerlink" title="Logarithmic Big-O"></a>Logarithmic Big-O</h3><p>Another common pattern with recursive functions is to make a single recursive call, but to preform some operation other than addition or subtraction on n when recursing. Here’s an example function that returns true if the input is a power of 2, and false otherwise.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">isPowerOfTwo</span>(<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span>(n === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n &lt; <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> isPowerOfTwo(n/<span class="number">2</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>Here, a call to the function either returns, or generates one more call to the function, but n decreases by a factor of 2 in each recursive call. If we look at the example of calling the function with 32, the call stack will look something like this:</p>
+<blockquote>
+<p><code>isPowerOfTwo(2)</code><br><code>isPowerOfTwo(4)</code><br><code>isPowerOfTwo(8)</code><br><code>isPowerOfTwo(16)</code><br><code>isPowerOfTwo(32)</code></p>
+</blockquote>
+<p>So calling the function with n = 32 generates 4 recursive calls, for a total of 5 calls, including the initial function call. Using n as our input size, and k as the number of calls made to the recursive function (and since each recursive call runs in constant time we could also consider k to represent the number of operations being preformed) our function will keep dividing n by 2 until $\frac{n}{2^k}$ is less than or equal to one. Solving for k in this equation we get:</p>
+<p>$$\frac{n}{2^k} = 1 \ \Rightarrow \ n = 2^k \ \Rightarrow \ k = \log_2(n).$$</p>
+<p>To summarise, our time complexity is $\mathcal{O}(\log(n))$. Remember that in Big-O we don’t have to worry about the base of the logarithm. All bases are still considered $O(log(n))$ time complexity.</p>
+<h2 id="Recursive-Functions-with-Two-Recursive-Calls"><a href="#Recursive-Functions-with-Two-Recursive-Calls" class="headerlink" title="Recursive Functions with Two Recursive Calls"></a>Recursive Functions with Two Recursive Calls</h2><p>When a recursive function generates multiple recursive calls (like in the cannonical <a href="http://iveytopaz.com/2016/09/23/recursion/">recursive Fibonacci function</a>) it can be a bit trickier to determine how many total function calls result from the initial call. It’s helpful to use a tree diagaram to map out the resulting function calls, and determine the total number of operations.</p>
+<h3 id="Linear-Logarithmic-Functions"><a href="#Linear-Logarithmic-Functions" class="headerlink" title="Linear * Logarithmic Functions"></a>Linear * Logarithmic Functions</h3><p>Some functions that generate 2 recursive calls during their excecution are using a ‘Divide-and-Conquer’ strategy. A good example of this type of function is merge sort.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mergeSort</span> (<span class="params">arr</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (arr.length === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> arr;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">let</span> split = <span class="built_in">Math</span>.floor(arr.length / <span class="number">2</span>);</div><div class="line">    <span class="keyword">let</span> sorted = zip(mergeSort(arr.slice(<span class="number">0</span>, split)), mergeSort(arr.slice(split)));</div><div class="line">    <span class="keyword">return</span> sorted;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">zip</span> (<span class="params">arr1, arr2</span>) </span>&#123;</div><div class="line">  <span class="keyword">let</span> merged = [];</div><div class="line">  <span class="keyword">let</span> i1 = <span class="number">0</span>;</div><div class="line">  <span class="keyword">let</span> i2 = <span class="number">0</span>;</div><div class="line">  <span class="keyword">while</span> (arr1[i1] !== <span class="literal">undefined</span> &amp;&amp; arr2[i2] !== <span class="literal">undefined</span>) &#123;</div><div class="line">    <span class="keyword">if</span> (arr1[i1] &lt; arr2[i2]) &#123;</div><div class="line">      merged.push(arr1[i1]);</div><div class="line">      i1++;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      merged.push(arr2[i2]);</div><div class="line">      i2++;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> arr1[i1] ? [...merged, ...arr1.slice(i1)] : [...merged, ...arr2.slice(i2)];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>For now, we will ignore the zip function, and just consider the merge function. A single call to merge runs in constant time, and then generates 2 calls to merge, each with an input size of $\frac{n}{2}$, where n is the size of the array to be sorted. The total number of recursive calls to merge generated by an array of length 8, for example, can be modeled like this, where n is the length of the array passed as an input:</p>
+<p><img src="/imgs/mergeTree.png" alt="Merge Sort Call Tree"></p>
+<p>Notice that we divide n by 2 at each level of the tree, so there are $\log_2(n)$ levels to this tree. Now, looking at the <code>zip</code> function, it performs a single operation on every item in <code>arr1</code> and <code>arr2</code>, so it runs in linear time. At each level of our call tree, every node goes through the <code>zip</code> function once with it’s sibling node. We have $\log_2(n)$ levels to the tree, and at each level every item from the original array is put through the $O(n)$ <code>zip</code> function, so we have $O(n*\log(n))$ time complexity in total. </p>
+<p>In general, time complexity for divide-and-conquer functions is not always as simple as multiplying the time complexities of two functions together, but if you are interested in a more general solution, check out the <a href="https://en.wikipedia.org/wiki/Master_theorem" target="_blank" rel="external">Master theorem</a>.</p>
+<h3 id="Exponential-Functions"><a href="#Exponential-Functions" class="headerlink" title="Exponential Functions"></a>Exponential Functions</h3><p>Another example that where it is useful to look at the call tree to determine time complexity is a naive, non-optimized implementation of Fibonacci.<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">fib</span> (<span class="params">n</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (n === <span class="number">0</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (n === <span class="number">1</span>) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="keyword">return</span> fib (n - <span class="number">2</span>) + fib (n - <span class="number">1</span>);</div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>Here, every call runs in constant time, and generates 2 calls, until reaching <code>n === 0</code> or <code>n === 1</code>. Our call tree for the 8th Fibonacci looks like this</p>
+<p><img src="/imgs/fibTree.png" alt="Fibonacci Call Tree"></p>
+<p>Here we decrement n by 1, or 2 with each recursive call (recall that with merge sort we were dividing n by 2 in the recursive calls). This means we end up with n levels in our call tree. You’ll notice that the nth and nth - 1 levels are not full. We are going to first figure out the time complexity assuming these levels are completely full. This will give us a good estimate. </p>
+<p>If the levels were full, we would have $2^0 + 2^1 + 2^2 + 2^3 + 2^4$ calls. This sums to $2^n - 1$ total calls. If you’re interested, <a href="http://math.stackexchange.com/questions/784229/induction-help-proving-the-sum-of-the-n-powers-of-2" target="_blank" rel="external">here’s a proof</a> showing why this is true.</p>
+<p>If we wanted to be really precise, we can mathematically account for the partially full levels in this tree, and we would find that the time complexity is best estimated by $1.6^n$, but for the purposes of Big-O, $2^n$ is a good enough estimate.</p>
+<p>The takeaway here is that generating 2 recursive calls from every call, and decreasing n linearly in each call gives us Big-O of $2^n$. If we were making 3 recursive calls inside our function, we would have $3^n$ time complexity, and we can generalize this to say that for multiple recursive calls with n moving linearly towards the base case, we get $branches^n$ time complexity, where branches is the number of recursive calls inside the function body. </p>
+<p>A quick note on exponential time complexity: the base does matter here. While the difference between $O(log_2(n))$ and $O(log_4(n))$ is a <a href="https://www.quora.com/Why-we-do-not-consider-base-of-log-in-time-complexity" target="_blank" rel="external">constant factor</a>, the difference between $2^n$ and $4^n$ is a factor of $2^n$, because $4^n = (2^2)^n = 2^{2n} = 2^n*2^n$, which is definitely not a constant factor.</p>
+<h2 id="Summing-it-up"><a href="#Summing-it-up" class="headerlink" title="Summing it up"></a>Summing it up</h2><p>The two main considerations for figuring out Big-O for recursive functions are:</p>
+<ol>
+<li>What is the runtime of a single call to this recursive function?</li>
+<li>What does the call tree look like, or how many recursive calls get generated for an input of n?</li>
+</ol>
+<p>In the examples here other than merge sort, a single recursive call runs in constant time. It’s important to keep in mind that if each recursive call is doing more than a simple constant time operation (or operations), then you need to account for that time as well. </p>
+<p>For an even math-ier take on this, check out <a href="https://www.cs.duke.edu/~ola/ap/recurrence.html" target="_blank" rel="external">this explanation of recurrence relations</a>.</p>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2016/11/20/express-middleware/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Express Middleware&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+
+</html>
