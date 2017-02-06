@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="Ivey Topaz">
 <meta property="og:description" content="I recently tried out FaceBook’s new react-create-app starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my seco">
 <meta property="og:image" content="http://iveytopaz.com/imgs/react.png">
-<meta property="og:updated_time" content="2017-01-11T09:53:19.562Z">
+<meta property="og:updated_time" content="2017-02-06T21:10:42.774Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React From Scratch">
 <meta name="twitter:description" content="I recently tried out FaceBook’s new react-create-app starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my seco">
@@ -91,6 +91,7 @@ ga('send', 'pageview');
         <p><img src="/imgs/react.png" alt="React is fantastic. Once you get it started..."></p>
 <p>I recently tried out FaceBook’s new <code>react-create-app</code> starter kit. I have to say, it was easy to start, and the build is fast. However, I ran into some trouble when trying to deploy my app. On my second go with React, I decided, perhaps unwisely, to build it from the ground up. After some missteps and a lot of time spent researching, here is the build I came up with.</p>
 <a id="more"></a>
+<p>(Before we get started, if you’re interested in setting up React with Webpack, check out this great blog post from the one and only <a href="http://www.lukewilson.net/2017/02/01/Setting-up-React-with-Webpack/" target="_blank" rel="external">Luke Wilson</a>)</p>
 <h2 id="Why-DIY"><a href="#Why-DIY" class="headerlink" title="Why DIY?"></a>Why DIY?</h2><p>There are plenty of good reasons to use a starter kit and skip the environment set up for React. However, if you want flexibility, control, and that satisfying feeling that only comes with doing things yourself, you’re going to have to roll up your sleeves and get to ready to <code>npm install</code>. I don’t claim that this build is perfect, but it works, and it’s absolutely minimal. So without further ado, here is React from Scratch:</p>
 <h2 id="Pre-Reqs"><a href="#Pre-Reqs" class="headerlink" title="Pre-Reqs"></a>Pre-Reqs</h2><p>You will need <code>node</code> and <code>npm</code> installed globally to start this process, as well as <code>grunt-cli</code> to run the build. You will also need a basic server to serve up your static files. If you just want to test out React on your local machine, you can use the <code>live-server</code> package from npm, but for deployment, you will need your own server. I’ll start with setting up your project and building a simple server.</p>
 <h2 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h2><p>Create your project directory, and <code>npm init</code> from inside the directory - you can speed through the setup process by just hitting enter for each option, or fill it out know if you know you will be deploying the project. Then <code>git init</code> and set up your <code>git remote</code>(this step is optional).</p>
