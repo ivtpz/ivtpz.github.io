@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Union Types in Flow - Ivey Topaz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Flow can be useful for adding clarity to your JavaScript code, and catching potential errors. It’s error messages, however, can sometimes be cryptic. This post is the result of a few hours of my time">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Union Types in Flow">
+<meta property="og:url" content="http://iveytopaz.com/2017/09/23/flow-union-types/index.html">
+<meta property="og:site_name" content="Ivey Topaz">
+<meta property="og:description" content="Flow can be useful for adding clarity to your JavaScript code, and catching potential errors. It’s error messages, however, can sometimes be cryptic. This post is the result of a few hours of my time">
+<meta property="og:image" content="http://iveytopaz.com/imgs/flow.png">
+<meta property="og:updated_time" content="2017-09-24T10:31:20.468Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Union Types in Flow">
+<meta name="twitter:description" content="Flow can be useful for adding clarity to your JavaScript code, and catching potential errors. It’s error messages, however, can sometimes be cryptic. This post is the result of a few hours of my time">
+<meta name="twitter:image" content="http://iveytopaz.com/imgs/flow.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="/webfonts/ptserif/main.css" rel='stylesheet' type='text/css'>
+  <link href="/webfonts/source-code-pro/main.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-86356826-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <header id="header">
+  <div id="header-outer" class="outer">
+    <div id="header-inner" class="inner">
+      <a id="main-nav-toggle" class="nav-icon" href="javascript:;"></a>
+      <a id="logo" class="logo" href="/"></a>
+      <nav id="main-nav">
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        <div id="search-form-wrap">
+          <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://iveytopaz.com"></form>
+        </div>
+      </nav>
+    </div>
+  </div>
+</header>
+    <section id="main" class="outer"><article id="post-flow-union-types" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Union Types in Flow
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      <a href="/2017/09/23/flow-union-types/" class="article-date">
+  <time datetime="2017-09-23T04:00:00.000Z" itemprop="datePublished">09-23-2017</time>
+</a>
+      
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/imgs/flow.png" alt="Flow - bringing inscrutable error messages back into vogue"></p>
+<p><a href="https://flow.org/en/docs/" target="_blank" rel="external">Flow</a> can be useful for adding clarity to your JavaScript code, and catching potential errors. It’s error messages, however, can sometimes be cryptic. This post is the result of a few hours of my time, some Flow union type errors, and the Rosetta Stone.</p>
+<a id="more"></a>
+<h2 id="Safety-Warning"><a href="#Safety-Warning" class="headerlink" title="Safety Warning"></a>Safety Warning</h2><p>Disclaimer: for those who have worked with strictly typed languages, Flow plays fast and loose with the meanings of <em>union types</em> and <em>intersection types</em>. The upside is that this allows Flow to give JS developers useful information about their code. The downside is it can drive purists and mathematicians alike into fits of rage, and make using Flow non-intuitive. If you fall into either of those categories you may want to stop reading now and save yourself the blood pressure spike.</p>
+<p>On to the practical advice.</p>
+<h2 id="Union-Types-In-Flow"><a href="#Union-Types-In-Flow" class="headerlink" title="Union Types In Flow"></a>Union Types In Flow</h2><p>I won’t restate what’s already written, so if you’re not familiar with union types in Flow, start <a href="https://flow.org/en/docs/types/unions/" target="_blank" rel="external">here</a>. In short, union types mean that something is one of a set of types. In the React &amp; Redux app I am currently working on, the first place I found union types to be helpful was in typing a set of action creators. Here’s a simple example from the flow docs of typing some action creators and a reducer:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// @flow</span></div><div class="line">type State = &#123;</div><div class="line">  +value: boolean <span class="comment">// + indicates that property is read-only, or immutable</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line">type FooAction = &#123;</div><div class="line">  type: <span class="string">"FOO"</span>,</div><div class="line">  foo: boolean</div><div class="line">&#125;;</div><div class="line"></div><div class="line">type BarAction = &#123;</div><div class="line">  type: <span class="string">"BAR"</span>,</div><div class="line">  bar: boolean</div><div class="line">&#125;;</div><div class="line"></div><div class="line">type Action = FooAction | BarAction; <span class="comment">// Union type</span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state: State, action: Action</span>): <span class="title">State</span> </span>&#123;</div><div class="line">  <span class="keyword">switch</span> (action.type) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="string">"FOO"</span>:</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        ...state,</div><div class="line">        value: action.foo</div><div class="line">      &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="string">"BAR"</span>:</div><div class="line">      <span class="keyword">return</span> &#123;</div><div class="line">        ...state,</div><div class="line">        value: action.bar</div><div class="line">      &#125;;</div><div class="line">    <span class="keyword">default</span>:</div><div class="line">      (action: empty); <span class="comment">// check to make sure that all possible cases ore covered</span></div><div class="line">      <span class="keyword">return</span> state;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Here the <code>Actions</code> type is a union type of either a <code>FooAction</code> or a <code>BarAction</code>. Since both of these types have uniquely identifiable <code>&quot;type&quot;</code> properties, and the reducer uses a switch statement based on the value of <code>action.type</code>, it knows which action will result in which case statement. This allows the type checker to correctly identify that an action that triggers <code>case &quot;FOO&quot;</code> will have a <code>foo</code> property, and an action that triggers <code>case &quot;BAR&quot;</code> will have a <code>bar</code> property. Trying to access <code>action.foo</code> in <code>case &quot;BAR&quot;</code> would throw an error.</p>
+<h3 id="Unsealed-vs-Exact-Object-types"><a href="#Unsealed-vs-Exact-Object-types" class="headerlink" title="Unsealed vs. Exact Object types"></a>Unsealed vs. Exact Object types</h3><p>I tried to use union types in a slightly different context and was surprised to find that they did not do what I expected. Consider the following example:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// @flow</span></div><div class="line">type A = &#123;</div><div class="line">  name: string,</div><div class="line">  foo: number</div><div class="line">&#125;;</div><div class="line">  </div><div class="line">type B = &#123;</div><div class="line">  bar: string</div><div class="line">&#125;;</div><div class="line"></div><div class="line">type Item = A | B;</div><div class="line"></div><div class="line">type Items = <span class="built_in">Array</span>&lt;Item&gt;;</div><div class="line">  </div><div class="line"><span class="keyword">const</span> iterate = (items: Items) =&gt; &#123;</div><div class="line">  items.forEach((item: Item) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (item.foo) &#123;</div><div class="line">      <span class="built_in">console</span>.log(item.name);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>Here flow complains that <code>property &quot;name&quot; is not found on object type of &quot;item&quot;</code>. I expected Flow to identify that since <code>item.foo</code> exists, this item must be of type <code>A</code> and have a <code>&quot;name&quot;</code> property. After being thoroughly disappointed in Flow for an hour or two, and vowing to strip it out of the project, I finally stumbled across <a href="https://flow.org/en/docs/types/objects/#toc-exact-object-types" target="_blank" rel="external">exact object types</a>.</p>
+<p>Types <code>A</code> and <code>B</code> in the example above are unsealed objects, meaning they can have additional properties not listed in the type. So the object<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123; foo: <span class="number">6</span>, bar: <span class="string">'something'</span> &#125;</div></pre></td></tr></table></figure></p>
+<p>could still be of type <code>B</code>. The error that Flow throws is accurate (albeit not particularly descriptive).</p>
+<p>If we replace types <code>A</code> and <code>B</code> above with exact object types, using the <code>{| |}</code> syntax, it locks the types, indicating that there can be no other properties on these objects except the ones listed (or the properties inherited from the Object type). This code does not error:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// @flow</span></div><div class="line">type A = &#123;|</div><div class="line">  name: string,</div><div class="line">  foo: number</div><div class="line">|&#125;;</div><div class="line">  </div><div class="line">type B = &#123;|</div><div class="line">  bar: string</div><div class="line">|&#125;;</div><div class="line"></div><div class="line">type Item = A | B;</div><div class="line"></div><div class="line">type Items = <span class="built_in">Array</span>&lt;Item&gt;;</div><div class="line">  </div><div class="line"><span class="keyword">const</span> iterate = (items: Items) =&gt; &#123;</div><div class="line">  items.forEach((item: Item) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (item.foo) &#123;</div><div class="line">      <span class="built_in">console</span>.log(item.name);</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>In the Redux example, even though it uses unsealed object types, Flow can identify which type in the union set is in use by the unique <code>&quot;type&quot;</code> property on each action. When an identifying property is not available on an object, exact object types are needed for Flow to infer which type is in use.</p>
+<h2 id="Intersection-Types"><a href="#Intersection-Types" class="headerlink" title="Intersection Types"></a>Intersection Types</h2><p>A quick note on using the exact object type to enable type checking with union types. You may want to sprinkle in some intersection types to allow for inheritance in your types. However, Flow doesn’t allow intersection types to be used with exact objects. <a href="https://github.com/facebook/flow/issues/2626" target="_blank" rel="external">See this discussion for an explanation.</a></p>
+<p>They have, however, recently added support for using the spread operator to create intersection types with exact object types. Here’s an extension to our previous example, that provides a working example of intersection types with exact objects:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// @flow</span></div><div class="line">type A = &#123;|</div><div class="line">  name: string,</div><div class="line">  foo: number</div><div class="line">|&#125;;</div><div class="line">  </div><div class="line">type B = &#123;|</div><div class="line">  bar: string</div><div class="line">|&#125;;</div><div class="line"></div><div class="line">type C = &#123;|</div><div class="line">  fooBar: boolean</div><div class="line">|&#125;</div><div class="line"></div><div class="line">type BAndC = &#123;|</div><div class="line">  ...B,</div><div class="line">  ...C</div><div class="line">|&#125;</div><div class="line"></div><div class="line">type Item = A | BAndC;</div><div class="line"></div><div class="line">type Items = <span class="built_in">Array</span>&lt;Item&gt;;</div><div class="line">  </div><div class="line"><span class="keyword">const</span> iterate = (items: Items) =&gt; &#123;</div><div class="line">  items.forEach((item: Item) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (item.foo) &#123;</div><div class="line">      <span class="built_in">console</span>.log(item.name);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (item.bar) &#123;</div><div class="line">      <span class="built_in">console</span>.log(<span class="string">`FooBar is <span class="subst">$&#123;item.fooBar.toString()&#125;</span>`</span>)</div><div class="line">    &#125;</div><div class="line">  &#125;);</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<h2 id="Summing-It-Up"><a href="#Summing-It-Up" class="headerlink" title="Summing It Up"></a>Summing It Up</h2><p>Takeaways from working through this problem:</p>
+<ol>
+<li>Flow is not always intuitive. Read the docs.</li>
+<li>Use exact object types when you want unions of objects, and expect Flow to infer which type you are using when.</li>
+<li>Don’t ask a functional programmer for help understanding Flow. It will only enrage them.</li>
+</ol>
+
+      
+    </div>
+    
+    
+      <footer class="article-footer">
+        
+      </footer>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/11/recursion-time-complexity/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Time Complexity in Recursive Functions&nbsp;<span>&gt;</span></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+
+<div class="share_addthis">
+  <div class="sharing addthis_toolbox share">
+    <a class="addthis_button_facebook_like"></a>
+    <a class="addthis_button_tweet"></a>
+    <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-560c64c35486b3d4" async="async"></script>
+</div>
+
+
+
+
+
+</section>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Ivey Topaz&nbsp;
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, theme by <a href="http://github.com/ppoffice">PPOffice</a>
+    </div>
+  </div>
+</footer>
+    
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+
+</html>
